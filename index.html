@@ -2,78 +2,249 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kanka'nın Sitesi</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1020;
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 25px;
-      background: #151b30;
-      color: #a78bfa;
-      font-size: 25px;
-      font-weight: bold;
-    }
-
-    main {
-      padding: 100px 20px;
-    }
-
-    h1 {
-      font-size: 45px;
-      color: #a78bfa;
-    }
-
-    p {
-      color: #cbd5e1;
-      line-height: 1.8;
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 15px 25px;
-      background: #7c3aed;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-    }
-
-    a:hover {
-      background: #6d28d9;
-    }
-
-    footer {
-      padding: 25px;
-      color: #94a3b8;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İlanX | Al, Sat, Keşfet</title>
+<style>
+:root{--red:#e11d48;--dark:#172033;--muted:#64748b;--bg:#f4f6fa}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{background:white;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:5}
+.nav{max-width:1150px;margin:auto;padding:16px 20px;display:flex;align-items:center;gap:20px}
+.logo{font-size:27px;font-weight:900;color:var(--red);letter-spacing:-1px}
+.tagline{color:var(--muted);font-size:12px}
+.navlinks{margin-left:auto;display:flex;align-items:center;gap:18px}
+.navlinks a{color:var(--dark);text-decoration:none;font-size:14px}
+.primary{border:0;border-radius:8px;background:var(--red);color:white;padding:12px 16px;font-weight:bold}
+.primary:hover{background:#be123c}
+.wrap{max-width:1150px;margin:auto;padding:24px 20px}
+.hero{background:linear-gradient(120deg,#171d33,#303b60);color:white;padding:38px;border-radius:18px}
+.hero h1{font-size:clamp(28px,4vw,43px);margin:0 0 12px}
+.hero p{color:#d6dced;line-height:1.6}
+.search{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-top:24px}
+input,select{min-width:0;width:100%;padding:13px;border:1px solid #dce1ea;border-radius:8px;background:white;color:#172033}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 16px}
+.section-head h2{font-size:22px;margin:0}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.category{background:white;border:1px solid #e7eaf0;border-radius:12px;padding:19px;text-align:left;color:var(--dark)}
+.category:hover,.category.active{border-color:var(--red);background:#fff1f4}
+.cat-icon{font-size:26px;margin-bottom:10px}
+.category strong{display:block;margin-bottom:5px}
+.small{font-size:12px;color:var(--muted)}
+.listings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:white;border:1px solid #e6e9ef;border-radius:13px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px #17203312}
+.photo{height:170px;background:#e9edf5;display:flex;align-items:center;justify-content:center;font-size:65px;position:relative}
+.label{position:absolute;top:12px;left:12px;background:white;border-radius:5px;padding:5px 8px;font-size:11px;font-weight:bold}
+.cardbody{padding:16px}
+.card h3{font-size:16px;margin:0 0 10px;line-height:1.4}
+.price{font-size:21px;font-weight:800;color:var(--red)}
+.meta{display:flex;justify-content:space-between;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5;color:var(--muted);font-size:12px}
+.card button{margin-top:14px;width:100%;padding:10px;background:white;border:1px solid #dce1ea;border-radius:7px;color:var(--dark)}
+.card button:hover{border-color:var(--red);color:var(--red)}
+.empty{grid-column:1/-1;text-align:center;padding:40px;background:white;border-radius:12px;color:var(--muted)}
+footer{margin-top:45px;background:#172033;color:white;padding:30px 20px;text-align:center}
+footer p{color:#aab4c8;font-size:13px}
+.modal{position:fixed;inset:0;background:#0f172acc;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal.open{display:flex}
+.dialog{width:min(480px,100%);background:white;padding:24px;border-radius:15px;max-height:90vh;overflow:auto}
+.dialog h2{margin-top:0}
+.formgrid{display:grid;gap:12px}
+.formgrid label{font-size:13px;font-weight:bold;display:grid;gap:6px}
+.close{float:right;border:0;background:#f1f5f9;border-radius:7px;padding:8px}
+@media(max-width:750px){
+ .nav{flex-wrap:wrap;gap:10px}.navlinks{width:100%;margin:0;justify-content:space-between}
+ .search{grid-template-columns:1fr 1fr}.search input{grid-column:1/-1}
+ .categories{grid-template-columns:repeat(2,1fr)}
+ .listings{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero{padding:25px}
+}
+@media(max-width:460px){
+ .listings{grid-template-columns:1fr}
+ .photo{height:190px}
+ .navlinks a{font-size:12px}
+}
+</style>
 </head>
 <body>
+<header>
+ <div class="nav">
+  <div>
+   <div class="logo">İlanX<span style="color:#172033">.</span></div>
+   <div class="tagline">Al, sat, keşfet.</div>
+  </div>
+  <nav class="navlinks">
+   <a href="#kategoriler">Kategoriler</a>
+   <a href="#ilanlar">İlanlar</a>
+   <button class="primary" onclick="openModal()">+ Ücretsiz İlan Ver</button>
+  </nav>
+ </div>
+</header>
 
-  <header>KANKA.DEV 🚀</header>
+<main class="wrap">
+ <section class="hero">
+  <h1>Aradığın burada.</h1>
+  <p>Evini bul, arabana bak, yeni fırsatları keşfet.<br>İhtiyacın olanı tek yerde ara.</p>
+  <form class="search" id="searchForm">
+   <input id="query" placeholder="Ne arıyorsun? Örn. araba, daire..." aria-label="İlan ara">
+   <select id="categoryFilter" aria-label="Kategori">
+    <option value="Tümü">Tüm kategoriler</option>
+    <option value="Vasıta">Vasıta</option>
+    <option value="Emlak">Emlak</option>
+    <option value="Elektronik">Elektronik</option>
+    <option value="Ev & Yaşam">Ev & Yaşam</option>
+   </select>
+   <select id="sort" aria-label="Fiyat sıralaması">
+    <option value="new">En yeni</option>
+    <option value="low">Fiyat: Artan</option>
+    <option value="high">Fiyat: Azalan</option>
+   </select>
+   <button class="primary" type="submit">İlan Ara</button>
+  </form>
+ </section>
 
-  <main>
-    <h1>Selam Dünya!</h1>
-    <p>Bu benim ilk web sitem!</p>
-    <p>Kendi internet sitemi GitHub ile yapıyorum.</p>
-    <a href="https://github.com/" target="_blank">
-      GitHub'ı Keşfet
-    </a>
-  </main>
+ <section id="kategoriler">
+  <div class="section-head"><h2>Popüler kategoriler</h2></div>
+  <div class="categories">
+   <button class="category" data-cat="Vasıta"><div class="cat-icon">🚗</div><strong>Vasıta</strong><span class="small">Otomobil ve motosiklet</span></button>
+   <button class="category" data-cat="Emlak"><div class="cat-icon">🏠</div><strong>Emlak</strong><span class="small">Konut ve iş yeri</span></button>
+   <button class="category" data-cat="Elektronik"><div class="cat-icon">📱</div><strong>Elektronik</strong><span class="small">Telefon ve bilgisayar</span></button>
+   <button class="category" data-cat="Ev & Yaşam"><div class="cat-icon">🛋️</div><strong>Ev & Yaşam</strong><span class="small">Mobilya ve dekorasyon</span></button>
+  </div>
+ </section>
 
-  <footer>© 2026 Kanka.dev</footer>
+ <section id="ilanlar">
+  <div class="section-head">
+   <div><h2>Öne çıkan ilanlar</h2><div class="small" id="resultCount"></div></div>
+   <button onclick="resetFilters()" style="border:0;background:none;color:#e11d48">Filtreleri temizle</button>
+  </div>
+  <div class="listings" id="listingGrid"></div>
+ </section>
+</main>
 
+<footer>
+ <div class="logo" style="color:white">İlanX.</div>
+ <p>Al, sat, keşfet. Her şey bir arada.</p>
+ <p>Demo platformudur. İlanlar örnek amaçlıdır.</p>
+ <p>© 2026 İlanX</p>
+</footer>
+
+<div class="modal" id="modal">
+ <div class="dialog">
+  <button class="close" style="float:right" onclick="closeModal()">✕</button>
+  <h2>Ücretsiz ilan oluştur</h2>
+  <p class="small">Demo ilanı bu tarayıcıda görüntülenir. Gerçek yayın için sunucu gerekir.</p>
+  <form class="formgrid" id="listingForm">
+   <label>İlan başlığı<input id="title" required maxlength="80" placeholder="Örn. Satılık bilgisayar"></label>
+   <label>Kategori<select id="newCategory"><option>Vasıta</option><option>Emlak</option><option>Elektronik</option><option>Ev & Yaşam</option></select></label>
+   <label>Fiyat (TL)<input id="price" required type="number" min="1" max="100000000000" placeholder="25000"></label>
+   <label>Şehir<input id="city" required maxlength="40" placeholder="İstanbul"></label>
+   <button class="primary" type="submit">Demo İlanı Ekle</button>
+  </form>
+ </div>
+</div>
+
+<script>
+const listings = [
+ {title:"2022 model şehir otomobili",category:"Vasıta",price:875000,city:"İstanbul",emoji:"🚗",date:4},
+ {title:"Modern 2+1 daire",category:"Emlak",price:4250000,city:"Ankara",emoji:"🏠",date:3},
+ {title:"Akıllı telefon 128 GB",category:"Elektronik",price:18500,city:"İzmir",emoji:"📱",date:2},
+ {title:"Oyuncu bilgisayarı",category:"Elektronik",price:42000,city:"Bursa",emoji:"💻",date:1},
+ {title:"Şık salon koltuk takımı",category:"Ev & Yaşam",price:26500,city:"İstanbul",emoji:"🛋️",date:5},
+ {title:"Motosiklet - bakımlı",category:"Vasıta",price:112000,city:"Antalya",emoji:"🏍️",date:6}
+];
+const money = n => new Intl.NumberFormat("tr-TR").format(n)+" TL";
+const grid = document.getElementById("listingGrid");
+
+function render(){
+ const q=document.getElementById("query").value.trim().toLocaleLowerCase("tr");
+ const cat=document.getElementById("categoryFilter").value;
+ const sort=document.getElementById("sort").value;
+ let found=listings.filter(x=>
+  (cat==="Tümü"||x.category===cat) &&
+  (x.title+" "+x.category+" "+x.city).toLocaleLowerCase("tr").includes(q)
+ );
+ if(sort==="low")found.sort((a,b)=>a.price-b.price);
+ else if(sort==="high")found.sort((a,b)=>b.price-a.price);
+ else found.sort((a,b)=>a.date-b.date);
+ document.getElementById("resultCount").textContent=found.length+" ilan gösteriliyor";
+ grid.innerHTML="";
+ if(!found.length){
+  grid.innerHTML='<div class="empty">😕<br><br>Bu aramayla eşleşen ilan bulunamadı.</div>';
+  return;
+ }
+ found.forEach(x=>{
+  const card=document.createElement("article");
+  card.className="card";
+  const photo=document.createElement("div");
+  photo.className="photo";
+  photo.textContent=x.emoji;
+  const label=document.createElement("span");
+  label.className="label";
+  label.textContent=x.category;
+  photo.appendChild(label);
+  const body=document.createElement("div");
+  body.className="cardbody";
+  const h=document.createElement("h3");
+  h.textContent=x.title;
+  const price=document.createElement("div");
+  price.className="price";
+  price.textContent=money(x.price);
+  const meta=document.createElement("div");
+  meta.className="meta";
+  const city=document.createElement("span");
+  city.textContent="📍 "+x.city;
+  const status=document.createElement("span");
+  status.textContent=x.demo?"Demo ilan":"Örnek ilan";
+  meta.append(city,status);
+  const btn=document.createElement("button");
+  btn.textContent="İlan detayları";
+  btn.onclick=()=>alert(x.title+"\nFiyat: "+money(x.price)+"\nŞehir: "+x.city+"\n\nBu demo sitede gerçek satıcı bilgisi bulunmuyor.");
+  body.append(h,price,meta,btn);
+  card.append(photo,body);
+  grid.appendChild(card);
+ });
+}
+document.getElementById("searchForm").addEventListener("submit",e=>{e.preventDefault();render();document.getElementById("ilanlar").scrollIntoView({behavior:"smooth"});});
+document.getElementById("categoryFilter").addEventListener("change",()=>{
+ document.querySelectorAll(".category").forEach(b=>b.classList.toggle("active",b.dataset.cat===document.getElementById("categoryFilter").value));
+ render();
+});
+document.getElementById("sort").addEventListener("change",render);
+document.querySelectorAll(".category").forEach(b=>b.addEventListener("click",()=>{
+ document.getElementById("categoryFilter").value=b.dataset.cat;
+ document.querySelectorAll(".category").forEach(c=>c.classList.toggle("active",c===b));
+ render();
+ document.getElementById("ilanlar").scrollIntoView({behavior:"smooth"});
+}));
+function resetFilters(){
+ document.getElementById("query").value="";
+ document.getElementById("categoryFilter").value="Tümü";
+ document.getElementById("sort").value="new";
+ document.querySelectorAll(".category").forEach(b=>b.classList.remove("active"));
+ render();
+}
+function openModal(){document.getElementById("modal").classList.add("open")}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+document.getElementById("listingForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ listings.unshift({
+  title:document.getElementById("title").value.trim(),
+  category:document.getElementById("newCategory").value,
+  price:Number(document.getElementById("price").value),
+  city:document.getElementById("city").value.trim(),
+  emoji:({"Vasıta":"🚗","Emlak":"🏠","Elektronik":"📱","Ev & Yaşam":"🛋️"})[document.getElementById("newCategory").value],
+  date:0,demo:true
+ });
+ resetFilters();
+ closeModal();
+ e.target.reset();
+ document.getElementById("ilanlar").scrollIntoView({behavior:"smooth"});
+});
+render();
+</script>
 </body>
 </html>
